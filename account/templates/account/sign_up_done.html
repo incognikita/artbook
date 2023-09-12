@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Welcome, {{ new_user.username }}!</h1>
+<p>
+    Your account has been successfully created.
+    Now you can <a href="{% url 'sign_in' %}">Sign-in</a></p>
+</body>
+</html>

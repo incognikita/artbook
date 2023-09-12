@@ -1,0 +1,19 @@
+{% extends 'homepage/base.html' %}
+
+{% block title %}
+    Show post
+{% endblock  %}
+
+{% block mainmenu %}
+
+{% endblock %}
+
+{% block content %}
+<h1>{{ post.title|capfirst }}</h1>
+<p>{{ post.description|capfirst }}</p>
+
+{% for i in images %}
+    <p><img src="{{ i.file.url }}" alt="connecting" height="540" width="960"></p>
+{% endfor %}
+
+{% endblock %}

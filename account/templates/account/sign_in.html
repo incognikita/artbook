@@ -1,0 +1,29 @@
+{% extends 'homepage/base.html' %}
+
+{% block title %}
+  Sign-in
+{% endblock %}
+
+{% block mainmenu %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Sign-in Page</h1>
+<form action="" method="post">
+  <div class="form-error">
+    {{ form.non_field_errors }}
+  </div>
+  {% csrf_token %}
+  {% for f in form %}
+    <p>{{ f }}</p>
+  {% endfor %}
+  <button>Sign-in</button>
+</form>
+
+<form action="/">
+  <p>
+    <button>Go back</button>
+  </p>
+</form>
+{% endblock %}

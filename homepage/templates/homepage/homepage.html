@@ -1,0 +1,20 @@
+{% extends 'homepage/base.html' %}
+
+{% block title %}
+    Artbook
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'search_post' %}" method="get">
+    {% for f in form %}
+        <p>{{ f }} <button type="submit">Search</button></p>
+    {% endfor %}
+</form>
+{% for post in preview_image %}
+    <p>
+        <a href="{{ post.get_absolute_url }}">
+            <img src="{{ post.preview.url }}" alt="connecting" height="250" width="450">
+        </a>
+    </p>
+{% endfor %}
+{% endblock %}

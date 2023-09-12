@@ -1,0 +1,40 @@
+{% extends 'homepage/base.html' %}
+
+{% block title %}
+Sign-up
+{% endblock %}
+
+{% block mainmenu %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Sign-up Page</h1>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li>
+        {{ message }}
+        <a href="#" class="close">x</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {% for f in form %}
+    <p>{{ f }}</p>
+    <div class="form-error">
+        {{ f.errors }}
+    </div>
+    {% endfor %}
+    <button type="submit">Registration</button>
+</form>
+<form action="/">
+    <p>
+        <button>Go back</button>
+    </p>
+</form>
+{% endblock %}

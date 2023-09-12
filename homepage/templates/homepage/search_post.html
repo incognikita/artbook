@@ -1,0 +1,34 @@
+{% extends 'homepage/base.html' %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block mainmenu %}
+
+{% endblock %}
+
+{% block content %}
+{% if query %}
+    <h1>Post containing "{{ query }}"</h1>
+    <h3>
+        {% with results.count as total_results %}
+            Found {{ total_results }} result{{ total_results|pluralize }}
+        {% endwith %}
+    </h3>
+    {% for post in results %}
+        <h4>
+            <a href="{{ post.get_absolute_url }}"><img src="{{ post.preview.url }}" alt="connecting" height="250" width="450"></a>
+        </h4>
+    {% empty %}
+        <p>There are no results for your query.</p>
+    {% endfor %}
+    <p><a href="{% url 'homepage' %}">Search again</a></p>
+    {% else %}
+    <form action="" method="get">
+        {% for f in form %}
+            <p>{{ f }} <button type="submit">Search</button></p>
+        {% endfor %}
+    </form>
+{% endif %}
+{% endblock %}
