@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Content, UploadFile
+from .models import Content, UploadFile, Comment
 
 
 class UploadInline(admin.TabularInline):
@@ -10,6 +10,7 @@ class UploadInline(admin.TabularInline):
 
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
+    """Админка постов"""
     list_display = ['title', 'author', 'slug', 'create_post', 'publish_post', 'status']
 
     prepopulated_fields = {'slug': ('title',)}
@@ -25,5 +26,14 @@ class ContentAdmin(admin.ModelAdmin):
 
 @admin.register(UploadFile)
 class UploadFileAdmin(admin.ModelAdmin):
+    """Админка изображений к постам"""
     list_display = ['content', 'file']
     search_fields = ['content']
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'content', 'created', 'active']
+    list_filter = ['active', 'created', 'updated']
+    search_fields = ['user', 'body']
+    list_editable = ['active']

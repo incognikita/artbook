@@ -1,10 +1,11 @@
 from django import forms
 from taggit.forms import TagField
-from .models import Content, UploadFile
+from .models import Content, UploadFile, Comment
 
 
 class CreatePostForm(forms.ModelForm):
     """Форма создания поста"""
+
     class Meta:
         model = Content
         fields = ['title', 'description', 'preview', 'status']
@@ -43,3 +44,7 @@ class SearchForm(forms.Form):
     query = forms.CharField()
 
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['body']

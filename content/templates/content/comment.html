@@ -1,0 +1,15 @@
+{% extends 'homepage/base.html' %}
+
+{% block mainmenu %}
+
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'content:post_comment' post.id %}" method="post">
+    {% csrf_token %}
+    {% for f in form %}
+        <p>{{ f }}</p>
+        <button type="submit">Add comment</button>
+    {% endfor %}
+</form>
+{% endblock %}

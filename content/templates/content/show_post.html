@@ -1,19 +1,51 @@
 {% extends 'homepage/base.html' %}
 
+{% load static %}
+
 {% block title %}
     Show post
 {% endblock  %}
+
+{% block css_addition %}
+    <link rel="stylesheet" href="{% static 'content/css/show_post.css' %}">
+{% endblock css_addition %}
 
 {% block mainmenu %}
 
 {% endblock %}
 
 {% block content %}
+<!---Отображение элементов для пагинации--->
+{% if page.has_previous %}
+    <a href="{{ previous_page.get_absolute_url }}"><<<</a>
+{% endif %}
+{% if page.has_next %}
+    <a href="{{ next_page.get_absolute_url }}">>>></a>
+{% endif %}
+
+<!---Заголовок поста--->
 <h1>{{ post.title|capfirst }}</h1>
+
+<!---Содержание поста--->
 <p>{{ post.description|capfirst }}</p>
 
-{% for i in images %}
-    <p><img src="{{ i.file.url }}" alt="connecting" height="540" width="960"></p>
+<!---Отображение комментариев к посту--->
+{% for comment in comments %}
+    <p>
+        Comment {{ forloop.counter }} by {{ comment.user|title }}
+        {{ comment.created }}
+    </p>
+    <p>{{ comment.body }}</p>
+    <p>--------------------</p>
+{% empty %}
+    <p>There are no comments.</p>
 {% endfor %}
+{% include 'content/comment.html' %}
 
+<!---Отображение всех фото/видео файлов, принадлежащих посту--->
+<div class="posts">
+    {% for i in images %}
+        <p><img class="post__img" src="{{ i.file.url }}" alt="connecting"></p>
+    {% endfor %}
+</div>
 {% endblock %}

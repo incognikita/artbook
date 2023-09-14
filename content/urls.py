@@ -5,4 +5,5 @@ from .views import *
 urlpatterns = [
     path('create-post/', create_post, name='create_post'),
     path('show-post/<slug:slug>/<int:author>/<int:pk>', show_post, name='show_post'),
+    path('<int:post_id>/comment', post_comment, name='post_comment')
 ]

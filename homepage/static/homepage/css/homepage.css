@@ -1,0 +1,13 @@
+.project__img {
+    height: auto;
+    width: 100%;
+    max-height: 250px;
+    margin: 0px;
+}
+
+.posts {
+    display: -webkit-inline-box;
+    flex-wrap: wrap;
+    column-gap: 5px;
+    row-gap: 5px;
+}

@@ -1,8 +1,14 @@
 {% extends 'homepage/base.html' %}
 
+{% load static %}
+
 {% block title %}
     Artbook
 {% endblock %}
+
+{% block css_addition %}
+    <link rel="stylesheet" href="{% static 'homepage/css/homepage.css' %}">
+{% endblock css_addition %}
 
 {% block content %}
 <form action="{% url 'search_post' %}" method="get">
@@ -10,11 +16,14 @@
         <p>{{ f }} <button type="submit">Search</button></p>
     {% endfor %}
 </form>
-{% for post in preview_image %}
-    <p>
+
+<main class="section">
+    {% for post in preview_image %}
+    <div class="posts">
         <a href="{{ post.get_absolute_url }}">
-            <img src="{{ post.preview.url }}" alt="connecting" height="250" width="450">
+            <img class="project__img" src="{{ post.preview.url }}" alt="connecting" >
         </a>
-    </p>
-{% endfor %}
+    </div>
+    {% endfor %}
+</main>
 {% endblock %}

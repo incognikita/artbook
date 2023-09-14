@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from django.contrib.postgres.search import TrigramSimilarity
 from content.models import Content
 from content.forms import SearchForm
@@ -7,11 +8,11 @@ from content.forms import SearchForm
 def homepage(request):
     """Домашняя страница сайта"""
 
+    # Поиск контента на главной странице сайте
     form = SearchForm()
     query = None
     results = []
 
-    # Поиск контента на главной странице сайте
     if 'query' in request.GET:
         form = SearchForm(request.GET)
         if form.is_valid():

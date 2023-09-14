@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import UploadFile, Content
-from .forms import CreatePostForm, UploadFileForm, SearchForm
+from .models import UploadFile, Content, Comment
+from .forms import CreatePostForm, UploadFileForm, CommentForm
+from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator, EmptyPage
 
 
 def create_post(request):
@@ -28,12 +30,14 @@ def create_post(request):
                 file_instance = UploadFile(file=f,
                                            content=content_instance)
                 file_instance.save()  # Изображения сохряняются в БД
-            return redirect('content:create_post')
+            return redirect('homepage')
     else:
         form = CreatePostForm()
         form_file_upload = UploadFileForm()
-    return render(request, 'content/create_post.html', {'form': form,
-                                                        'form_file_upload': form_file_upload})
+    return render(request,
+                  'content/create_post.html',
+                  {'form': form,
+                   'form_file_upload': form_file_upload})
 
 
 def show_post(request, slug, author, pk):
@@ -44,5 +48,56 @@ def show_post(request, slug, author, pk):
                              author=author,
                              pk=pk)
     images = UploadFile.objects.filter(content=pk)
-    return render(request, 'content/show_post.html', {'post': post,
-                                                      'images': images})
+
+    # Список активных комментариев к посту
+    comments = Comment.objects.filter(content=pk, active=True)
+    comment_form = CommentForm()
+
+    # Пагинация
+    post_list = Content.published.all()
+    paginator = Paginator(post_list, 1)
+
+    page = paginator.page(list(post_list).index(post) + 1)  # Индекс текущего поста в списке всех постов
+
+    try:
+        previous_page = post_list[page.previous_page_number() - 1]  # Предыдущая страница относительно текущего поста
+    except EmptyPage:
+        previous_page = post_list.first()
+
+    try:
+        next_page = post_list[page.next_page_number() - 1]  # Следующая страница относительно текущего поста
+    except EmptyPage:
+        next_page = post_list.last()
+
+    return render(request,
+                  'content/show_post.html',
+                  {'post': post,
+                   'images': images,
+                   'form': comment_form,
+                   'comments': comments,
+                   'previous_page': previous_page,
+                   'next_page': next_page, 'page': page})
+
+
+@require_POST
+def post_comment(request, post_id):
+    """Создание комментариев"""
+    post = get_object_or_404(Content,
+                             id=post_id,
+                             status=Content.Status.PUBLISHED)
+    update_page = Content.published.get(
+        title=post.title).get_absolute_url()  # Не уверен что это правильный способ получения url
+    # но других вариантов не нашел и не придумал
+
+    form = CommentForm(data=request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.content = post
+        comment.user = request.user
+        comment.save()
+
+    #  После сохранения комментария в бд,
+    #  что бы сразу отобразить егоб
+    #  происходит редирект на тот же пост
+
+    return redirect(update_page)
